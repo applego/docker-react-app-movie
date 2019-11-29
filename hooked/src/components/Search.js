@@ -31,3 +31,7 @@ const Search = (props) => {
 }
 
 export default Search;
+
+/* This is so exciting!!! I’m sure you’ve just seen the first hooks API that we are going to use, and it’s called useState . As the name implies, it lets us add React state to function components. 
+The useState hook accepts one argument which is the initial state, and then it returns an array containing the current state (equivalent to this.state for class components) 
+and a function to update it (equivalent to this.setState ).*/
