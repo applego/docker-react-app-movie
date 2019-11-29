@@ -7,10 +7,45 @@ import Search from "./Search";
 
 const MOVIE_API_URL = "http://www.omdbapi.com/?i=tt3896198&apikey=dcf8c644"; // you should replace this with yours(I did it)
 
+const initialState = {
+  loading: true,
+  movies: [],
+  errorMessage: null
+};
+
+const reducer = (state, action) => {
+  switch(action.type){
+    case "SEARCH_MOVIES_REQUEST":
+      return{
+        ...state,
+        loading: true,
+        errorMessage: null
+      };
+    case "SEARCH_MOVIES_SUCCESS":
+        return {
+          ...state,
+          loading: false,
+          movies: action.payload
+        };
+    case "SEARCH_MOVIES_FAILURE":
+      return {
+        ...state,
+        loading: false,
+        errorMessage: action.error
+      };
+    default:
+        return state;
+  }
+};
+
 function App() {
-  const [loading, setLoading] = useState(true);
+  /*const [loading, setLoading] = useState(true);
   const [movies, setMovies] = useState([]);
   const [errorMessage, setErrorMessage] = useState(null);
+  ↓
+  */
+ const [state, dispatch] = useReducer(reducer, initialState);
+
 
   useEffect(()=>{
     fetch(MOVIE_API_URL)
