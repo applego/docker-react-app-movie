@@ -1,11 +1,12 @@
-import React, { useState, useEffect} from 'react';
-import logo from './logo.svg';
+//import React, { useState, useEffect} from 'react';
+import React, { useReducer, useEffect} from 'react';
+import logo from '../logo.svg';
 import '../App.css';
 import Header from "./Header";
 import Movie from "./Movie";
 import Search from "./Search";
 
-const MOVIE_API_URL = "http://www.omdbapi.com/?i=tt3896198&apikey=dcf8c644"; // you should replace this with yours(I did it)
+const MOVIE_API_URL = "https://www.omdbapi.com/?s=man&apikey=dcf8c644"; // you should replace this with yours(I did it)
 
 const initialState = {
   loading: true,
@@ -38,56 +39,62 @@ const reducer = (state, action) => {
   }
 };
 
-function App() {
-  /*const [loading, setLoading] = useState(true);
-  const [movies, setMovies] = useState([]);
-  const [errorMessage, setErrorMessage] = useState(null);
-  ↓
-  */
- const [state, dispatch] = useReducer(reducer, initialState);
-
+const App = () => {
+  const [state, dispatch] = useReducer(reducer, initialState);
 
   useEffect(()=>{
+
     fetch(MOVIE_API_URL)
     .then(response => response.json())
     .then(jsonResponse => {
-      setMovies(jsonResponse.Search);
-      setLoading(false);
+
+      dispatch({
+        type: "SEARCH_MOVIES_SUCCESS",
+        payload: jsonResponse.Search
+      });
     });
-  }, []);
+  },[]);
 
   const search = searchValue => {
-    setLoading(true);
-    setErrorMessage(null);
-
+    dispatch({
+      type: "SEARCH_MOVIES_REQUEST"
+    });
+    
     fetch(`https://www.omdbapi.com/?s=${searchValue}&apikey=dcf8c644`)
     .then(response => response.json())
     .then(jsonResponse => {
-      if(jsonResponse.Response === "True"){
-        setMovies(jsonResponse.Search);
-        setLoading(false);
-      }else{
-        setErrorMessage(jsonResponse.Error);
-        setLoading(false);
+      if(jsonResponse === "True"){
+        dispatch({
+          type: "SEARCH_MOVIES_SUCCESS",
+          payload: jsonResponse.Search
+        });
+      }
+      else{
+        dispatch({
+          type: "SEARCH_MOVIES_FAILURE",
+          error: jsonResponse.Error
+        });
       }
     });
   };
 
+  const { movies, errorMessage, loading } = state;
+
   return (
     <div className="App">
-      <Header text="OGAWA HOOKED"/>
+      <Header text="OGAWA HOOKED" />
       <Search search={search} />
       <p className="App-intro">Sharing a few of our favorite movies</p>
       <div className="movies">
-        {loading && !errorMessage ? (
+        { loading && !errorMessage ? (
           <span>loading...</span>
-        ) : errorMessage ? (
-          <div className="errorMessage">{errorMessage}</div>
-        ) : (
-          movies.map((movie, index) => (
-            <Movie key={`${index}-${movie.Title}`} movie={movie} />
-          ))
-        )}
+          ) : errorMessage ? (
+           <div className="errorMessage">{errorMessage}</div>
+           ):(
+             movies.map((movie, index) => (
+               <Movie key={`${index}-${movie.Title}`} movie={movie} />
+             ))
+           )}
       </div>
     </div>
   );
