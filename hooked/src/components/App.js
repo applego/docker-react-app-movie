@@ -47,7 +47,6 @@ const App = () => {
     fetch(MOVIE_API_URL)
     .then(response => response.json())
     .then(jsonResponse => {
-
       dispatch({
         type: "SEARCH_MOVIES_SUCCESS",
         payload: jsonResponse.Search
@@ -63,7 +62,7 @@ const App = () => {
     fetch(`https://www.omdbapi.com/?s=${searchValue}&apikey=dcf8c644`)
     .then(response => response.json())
     .then(jsonResponse => {
-      if(jsonResponse === "True"){
+      if(jsonResponse.Response === "True"){
         dispatch({
           type: "SEARCH_MOVIES_SUCCESS",
           payload: jsonResponse.Search
