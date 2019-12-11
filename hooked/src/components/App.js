@@ -6,7 +6,7 @@ import Header from "./Header";
 import Movie from "./Movie";
 import Search from "./Search";
 
-const MOVIE_API_URL = "https://www.omdbapi.com/?s=man&apikey=dcf8c644"; // you should replace this with yours(I did it)
+const MOVIE_API_URL = "https://www.omdbapi.com/?s=boi&apikey=dcf8c644"; // you should replace this with yours(I did it)
 
 const initialState = {
   loading: true,
@@ -81,7 +81,7 @@ const App = () => {
 
   return (
     <div className="App">
-      <Header text="OGAWA HOOKED" />
+      <Header text="OGAWA Boi HOOKED" />
       <Search search={search} />
       <p className="App-intro">Sharing a few of our favorite movies</p>
       <div className="movies">
